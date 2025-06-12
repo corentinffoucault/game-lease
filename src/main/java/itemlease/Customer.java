@@ -1,15 +1,21 @@
 package itemlease;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
+
+import itemlease.printer.APrinter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
 
     private String _name;
+    private APrinter _printer;
     private List<Lease> _leases = new ArrayList<Lease>();
 
-    public Customer(String name) {
+    public Customer(String name, APrinter printer) {
         _name = name;
+        _printer = printer;
     }
 
     public void addLease(Lease arg) {
@@ -23,7 +29,7 @@ public class Customer {
     public String statement() {
         double totalAmount = 0;
         int nbLoyaltyPoints = 0;
-        String result = "Games leased by " + getName() + "\n";
+        List<SimpleImmutableEntry<String, Double>> listOfGameWithAmount = new ArrayList<SimpleImmutableEntry<String, Double>>();
 
         for (Lease lease : _leases) {
             double thisAmount = lease.getAmount();
@@ -35,16 +41,12 @@ public class Customer {
             if (lease.enableBonus()) {
                 nbLoyaltyPoints++;
             }
-
+            
+            listOfGameWithAmount.add(new SimpleImmutableEntry<>(lease.getGame().getTitle(), thisAmount));
             // show figures for this lease
-            result += "\t" + lease.getGame().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
             totalAmount += thisAmount;
         }
 
-        // add footer lines
-        result += "Amount is " + String.valueOf(totalAmount) + "\n";
-        result += "You earned " + String.valueOf(nbLoyaltyPoints) + " loyalty points";
-
-        return result;
+        return _printer.print(getName(), totalAmount, nbLoyaltyPoints, listOfGameWithAmount);
     }
 }
