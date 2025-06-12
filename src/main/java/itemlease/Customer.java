@@ -35,18 +35,23 @@ public class Customer {
             double thisAmount = lease.getAmount();
 
             // add loyalty points
-            nbLoyaltyPoints++;
-            
-            // add bonus for a two day famous lease
-            if (lease.enableBonus()) {
-                nbLoyaltyPoints++;
-            }
+            nbLoyaltyPoints += getNbLoyaltyPoint(lease);
             
             listOfGameWithAmount.add(new SimpleImmutableEntry<>(lease.getGame().getTitle(), thisAmount));
+            
             // show figures for this lease
             totalAmount += thisAmount;
         }
 
         return _printer.print(getName(), totalAmount, nbLoyaltyPoints, listOfGameWithAmount);
+    }
+
+    private int getNbLoyaltyPoint(Lease lease) {
+        int nbLoyaltyPoints = 1;
+        // add bonus for a two day famous lease
+        if (lease.enableBonus()) {
+            nbLoyaltyPoints += 1;
+        }
+        return nbLoyaltyPoints;
     }
 }

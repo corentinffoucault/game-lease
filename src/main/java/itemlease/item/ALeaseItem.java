@@ -1,7 +1,6 @@
 package itemlease.item;
 
 public abstract class ALeaseItem {
-
     private String _title;
 
     public ALeaseItem(String title) {
@@ -13,8 +12,6 @@ public abstract class ALeaseItem {
     }
 
     public abstract double getAmount(int DaysLeased);
-    public boolean enableBonus() {
-        return false;
-    }
+    public abstract boolean enableBonus();
 
 }
