@@ -25,34 +25,19 @@ public class Customer {
         int nbLoyaltyPoints = 0;
         String result = "Games leased by " + getName() + "\n";
 
-        for (Lease each : _leases) {
-            double thisAmount = 0;
-
-            //determine amounts for each line
-            switch (each.getGame().getPriceCode()) {
-                case LeaseItem.REGULAR:
-                    thisAmount += 2;
-                    if (each.getDaysLeased() > 2)
-                        thisAmount += (each.getDaysLeased() - 2) * 1.5;
-                    break;
-                case LeaseItem.NEWLY_RELEASED:
-                    thisAmount += each.getDaysLeased() * 3;
-                    break;
-                case LeaseItem.CHILDREN:
-                    thisAmount += 1.5;
-                    if (each.getDaysLeased() > 3)
-                        thisAmount += (each.getDaysLeased() - 3) * 1.5;
-                    break;
-            }
+        for (Lease lease : _leases) {
+            double thisAmount = lease.getAmount();
 
             // add loyalty points
             nbLoyaltyPoints++;
+            
             // add bonus for a two day famous lease
-            if ((each.getGame().getPriceCode() == LeaseItem.NEWLY_RELEASED) && each.getDaysLeased() > 1)
+            if (lease.enableBonus()) {
                 nbLoyaltyPoints++;
+            }
 
             // show figures for this lease
-            result += "\t" + each.getGame().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
+            result += "\t" + lease.getGame().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
             totalAmount += thisAmount;
         }
 

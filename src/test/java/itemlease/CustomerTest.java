@@ -1,20 +1,23 @@
 package itemlease;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import itemlease.item.LeaseChildren;
+import itemlease.item.LeaseNewlyReleased;
+import itemlease.item.LeaseRegular;
 
 public class CustomerTest {
 
     @Test
     public void test() {
         Customer customer = new Customer("Bob");
-        customer.addLease(new Lease(new LeaseItem("Call Of Duty", LeaseItem.REGULAR), 2));
-        customer.addLease(new Lease(new LeaseItem("Golden Eye", LeaseItem.REGULAR), 3));
-        customer.addLease(new Lease(new LeaseItem("Short New", LeaseItem.NEWLY_RELEASED), 1));
-        customer.addLease(new Lease(new LeaseItem("Long New", LeaseItem.NEWLY_RELEASED), 2));
-        customer.addLease(new Lease(new LeaseItem("Super Mario", LeaseItem.CHILDREN), 3));
-        customer.addLease(new Lease(new LeaseItem("Threes", LeaseItem.CHILDREN), 4));
+        customer.addLease(new Lease(new LeaseRegular("Call Of Duty"), 2));
+        customer.addLease(new Lease(new LeaseRegular("Golden Eye"), 3));
+        customer.addLease(new Lease(new LeaseNewlyReleased("Short New"), 1));
+        customer.addLease(new Lease(new LeaseNewlyReleased("Long New"), 2));
+        customer.addLease(new Lease(new LeaseChildren("Super Mario"), 3));
+        customer.addLease(new Lease(new LeaseChildren("Threes"), 4));
 
         String expected = "" +
                 "Games leased by Bob\n" +
