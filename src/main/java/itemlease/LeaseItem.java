@@ -1,29 +1,21 @@
 package itemlease;
 
+import itemlease.leaseConfig.ALeaseConfig;
+
 public class LeaseItem {
-
-    public static final int CHILDREN = 2;
-    public static final int NEWLY_RELEASED = 1;
-    public static final int REGULAR = 0;
-
     private String _title;
-    private int _priceCode;
+    private ALeaseConfig _leaseConfig;
 
-    public LeaseItem(String title, int priceCode) {
+    public LeaseItem(String title, ALeaseConfig leaseConfig) {
         _title = title;
-        _priceCode = priceCode;
+        _leaseConfig = leaseConfig;
     }
 
-    public int getPriceCode() {
-        return _priceCode;
-    }
-
-    public void setPriceCode(int arg) {
-        _priceCode = arg;
-    }
     public String getTitle() {
         return _title;
     }
 
-
+    public ALeaseConfig getLeaseConfig() {
+        return _leaseConfig;
+    }
 }

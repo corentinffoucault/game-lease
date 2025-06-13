@@ -1,15 +1,21 @@
 package itemlease;
 
+import java.util.AbstractMap.SimpleImmutableEntry;
+
+import itemlease.printer.APrinter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
 
     private String _name;
+    private APrinter _printer;
     private List<Lease> _leases = new ArrayList<Lease>();
 
-    public Customer(String name) {
+    public Customer(String name, APrinter printer) {
         _name = name;
+        _printer = printer;
     }
 
     public void addLease(Lease arg) {
@@ -23,43 +29,29 @@ public class Customer {
     public String statement() {
         double totalAmount = 0;
         int nbLoyaltyPoints = 0;
-        String result = "Games leased by " + getName() + "\n";
+        List<SimpleImmutableEntry<String, Double>> listOfGameWithAmount = new ArrayList<SimpleImmutableEntry<String, Double>>();
 
-        for (Lease each : _leases) {
-            double thisAmount = 0;
-
-            //determine amounts for each line
-            switch (each.getGame().getPriceCode()) {
-                case LeaseItem.REGULAR:
-                    thisAmount += 2;
-                    if (each.getDaysLeased() > 2)
-                        thisAmount += (each.getDaysLeased() - 2) * 1.5;
-                    break;
-                case LeaseItem.NEWLY_RELEASED:
-                    thisAmount += each.getDaysLeased() * 3;
-                    break;
-                case LeaseItem.CHILDREN:
-                    thisAmount += 1.5;
-                    if (each.getDaysLeased() > 3)
-                        thisAmount += (each.getDaysLeased() - 3) * 1.5;
-                    break;
-            }
+        for (Lease lease : _leases) {
+            double thisAmount = lease.calculAmount();
 
             // add loyalty points
-            nbLoyaltyPoints++;
-            // add bonus for a two day famous lease
-            if ((each.getGame().getPriceCode() == LeaseItem.NEWLY_RELEASED) && each.getDaysLeased() > 1)
-                nbLoyaltyPoints++;
-
+            nbLoyaltyPoints += getNbLoyaltyPoint(lease);
+            
+            listOfGameWithAmount.add(new SimpleImmutableEntry<>(lease.getGame().getTitle(), thisAmount));
+            
             // show figures for this lease
-            result += "\t" + each.getGame().getTitle() + "\t" + String.valueOf(thisAmount) + "\n";
             totalAmount += thisAmount;
         }
 
-        // add footer lines
-        result += "Amount is " + String.valueOf(totalAmount) + "\n";
-        result += "You earned " + String.valueOf(nbLoyaltyPoints) + " loyalty points";
+        return _printer.print(getName(), totalAmount, nbLoyaltyPoints, listOfGameWithAmount);
+    }
 
-        return result;
+    private int getNbLoyaltyPoint(Lease lease) {
+        int nbLoyaltyPoints = 1;
+        // add bonus for a two day famous lease
+        if (lease.enableBonus()) {
+            nbLoyaltyPoints += 1;
+        }
+        return nbLoyaltyPoints;
     }
 }
