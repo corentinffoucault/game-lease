@@ -1,16 +1,11 @@
 package itemlease;
 
-import itemlease.item.ALeaseItem;
-
-/**
- * The Lease class represents a customer leasing a game.
- */
 public class Lease {
 
-    private ALeaseItem _leaseItem;
+    private LeaseItem _leaseItem;
     private int _daysLeased;
 
-    public Lease(ALeaseItem leaseItem, int daysLeased) {
+    public Lease(LeaseItem leaseItem, int daysLeased) {
         _leaseItem = leaseItem;
         _daysLeased = daysLeased;
     }
@@ -19,15 +14,20 @@ public class Lease {
         return _daysLeased;
     }
 
-    public ALeaseItem getGame() {
+    public LeaseItem getGame() {
         return _leaseItem;
     }
 
-    public double getAmount() {
-        return _leaseItem.getAmount(_daysLeased);
+    public double calculAmount() {
+        double amount = _leaseItem.getLeaseConfig().getBasicAmount();
+        int numberOfDay = _leaseItem.getLeaseConfig().getNumberDayWithBasicAmount();
+        if (_daysLeased > numberOfDay) {
+            amount += (_daysLeased - numberOfDay) * _leaseItem.getLeaseConfig().getAmountMultiplier();
+        }
+        return amount;
     }
 
     public boolean enableBonus() {
-        return _leaseItem.enableBonus() && _daysLeased > 1;
+        return _leaseItem.getLeaseConfig().enableBonus() && _daysLeased > 1;
     }
 }

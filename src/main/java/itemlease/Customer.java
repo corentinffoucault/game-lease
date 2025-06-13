@@ -32,7 +32,7 @@ public class Customer {
         List<SimpleImmutableEntry<String, Double>> listOfGameWithAmount = new ArrayList<SimpleImmutableEntry<String, Double>>();
 
         for (Lease lease : _leases) {
-            double thisAmount = lease.getAmount();
+            double thisAmount = lease.calculAmount();
 
             // add loyalty points
             nbLoyaltyPoints += getNbLoyaltyPoint(lease);

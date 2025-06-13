@@ -3,9 +3,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import itemlease.item.LeaseChildren;
-import itemlease.item.LeaseNewlyReleased;
-import itemlease.item.LeaseRegular;
+import itemlease.leaseConfig.LeaseConfigChildren;
+import itemlease.leaseConfig.LeaseConfigNewlyReleased;
+import itemlease.leaseConfig.LeaseConfigRegular;
 import itemlease.printer.BasicPrinter;
 import itemlease.printer.HtmlPrinter;
 
@@ -13,13 +13,17 @@ public class CustomerTest {
 
     @Test
     public void testBasicText() {
+        LeaseConfigRegular configRegular = new LeaseConfigRegular();
+        LeaseConfigChildren configChildren = new LeaseConfigChildren();
+        LeaseConfigNewlyReleased configNewlyReleased = new LeaseConfigNewlyReleased();
+
         Customer customer = new Customer("Bob", new BasicPrinter());
-        customer.addLease(new Lease(new LeaseRegular("Call Of Duty"), 2));
-        customer.addLease(new Lease(new LeaseRegular("Golden Eye"), 3));
-        customer.addLease(new Lease(new LeaseNewlyReleased("Short New"), 1));
-        customer.addLease(new Lease(new LeaseNewlyReleased("Long New"), 2));
-        customer.addLease(new Lease(new LeaseChildren("Super Mario"), 3));
-        customer.addLease(new Lease(new LeaseChildren("Threes"), 4));
+        customer.addLease(new Lease(new LeaseItem("Call Of Duty", configRegular), 2));
+        customer.addLease(new Lease(new LeaseItem("Golden Eye", configRegular), 3));
+        customer.addLease(new Lease(new LeaseItem("Short New", configNewlyReleased), 1));
+        customer.addLease(new Lease(new LeaseItem("Long New", configNewlyReleased), 2));
+        customer.addLease(new Lease(new LeaseItem("Super Mario", configChildren), 3));
+        customer.addLease(new Lease(new LeaseItem("Threes", configChildren), 4));
 
         String expected = "" +
                 "Games leased by Bob\n" +
@@ -37,13 +41,17 @@ public class CustomerTest {
 
     @Test
     public void testHtmlText() {
+        LeaseConfigRegular configRegular = new LeaseConfigRegular();
+        LeaseConfigChildren configChildren = new LeaseConfigChildren();
+        LeaseConfigNewlyReleased configNewlyReleased = new LeaseConfigNewlyReleased();
         Customer customer = new Customer("Bob", new HtmlPrinter());
-        customer.addLease(new Lease(new LeaseRegular("Call Of Duty"), 2));
-        customer.addLease(new Lease(new LeaseRegular("Golden Eye"), 3));
-        customer.addLease(new Lease(new LeaseNewlyReleased("Short New"), 1));
-        customer.addLease(new Lease(new LeaseNewlyReleased("Long New"), 2));
-        customer.addLease(new Lease(new LeaseChildren("Super Mario"), 3));
-        customer.addLease(new Lease(new LeaseChildren("Threes"), 4));
+
+        customer.addLease(new Lease(new LeaseItem("Call Of Duty", configRegular), 2));
+        customer.addLease(new Lease(new LeaseItem("Golden Eye", configRegular), 3));
+        customer.addLease(new Lease(new LeaseItem("Short New", configNewlyReleased), 1));
+        customer.addLease(new Lease(new LeaseItem("Long New", configNewlyReleased), 2));
+        customer.addLease(new Lease(new LeaseItem("Super Mario", configChildren), 3));
+        customer.addLease(new Lease(new LeaseItem("Threes", configChildren), 4));
 
         String expected = "" +
                 "<h1>Games leased by <em>Bob</em></h1>" +
